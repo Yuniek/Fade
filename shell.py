@@ -1,16 +1,16 @@
-import pebble
+import fade
 
-env = pebble.Environment()
+env = fade.environment
 while True:
-    text = input('pebble > ')
+    text = input('fade > ')
 
     if text == 'bye()': exit()
 
 
     try:
-        result = pebble.run(text, env)
+        result = fade.run(text, env)
         if result is not None:
             print(result)
             
-    except pebble.PebbleError as error:
+    except fade.FadeError as error:
         print(error)

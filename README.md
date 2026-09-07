@@ -1,10 +1,10 @@
-# Pebble
+# Fade
 
-Pebble is a small interpreted programming language built from scratch in Python.
+Fade is a small interpreted programming language built from scratch in Python.
 
 The project focuses on understanding the core components of a programming language, including **lexical analysis, parsing, abstract syntax trees, interpretation, variables, and runtime environments**.
 
-Pebble is currently under active development, with new language features being added incrementally.
+Fade is currently under active development, with new language features being added incrementally.
 
 ---
 
@@ -12,7 +12,7 @@ Pebble is currently under active development, with new language features being a
 
 **V1.3.1 — Boolean Language Patch**
 
-Pebble currently supports:
+Fade currently supports:
 
 - Integers and floating-point numbers
 - Addition, subtraction, multiplication, and division
@@ -29,26 +29,26 @@ Pebble currently supports:
 ### Example
 
 ```text
-pebble > x = 10
+fade > x = 10
 
-pebble > x + 5
+fade > x + 5
 15
 
-pebble > x * 2
+fade > x * 2
 20
 
-pebble > x > 15
+fade > x > 15
 false
 
-pebble > x > 5 and x < 20
+fade > x > 5 and x < 20
 true
 ```
 
 ---
 
-## How Pebble Works
+## How Fade Works
 
-Pebble processes source code through a simple interpreter pipeline:
+Fade processes source code through a simple interpreter pipeline:
 
 ```text
 Source Code
@@ -73,7 +73,7 @@ Each stage has a specific responsibility:
 - **Lexer** — Converts source code into a sequence of tokens.
 - **Parser** — Converts tokens into an Abstract Syntax Tree (AST) while enforcing the language's grammar and operator precedence.
 - **AST** — Represents the structure of the program as a tree of language constructs.
-- **Interpreter** — Evaluates the AST according to Pebble's semantics.
+- **Interpreter** — Evaluates the AST according to Fade's semantics.
 - **Environment** — Stores and retrieves variables during execution.
 - **Result** — Produces the final evaluated value or an appropriate error.
 
@@ -83,7 +83,7 @@ The lexer reads the source code and converts it into **tokens** such as numbers,
 
 ### Parser
 
-The parser processes those tokens according to Pebble's syntax rules and builds an **Abstract Syntax Tree (AST)**.
+The parser processes those tokens according to Fade's syntax rules and builds an **Abstract Syntax Tree (AST)**.
 
 The AST represents the structure of the code rather than the original text.
 
@@ -95,23 +95,23 @@ The interpreter evaluates the AST and produces the result.
 
 The environment stores variables and their values during execution, allowing values to be reused in later expressions.
 
-This structure gives Pebble a foundation for adding more programming-language features over time.
+This structure gives Fade a foundation for adding more programming-language features over time.
 
 ---
 
 ## Project Structure
 
 ```text
-Pebble/
+Fade/
 
-├── pebble.py
+├── fade.py
 ├── README.md
 └── shell.py
 ```
 
-### `pebble.py`
+### `fade.py`
 
-Contains the core implementation of the Pebble language:
+Contains the core implementation of the Fade language:
 
 * Lexer
 * Parser
@@ -123,7 +123,7 @@ Contains the core implementation of the Pebble language:
 
 ### `shell.py`
 
-Provides a simple **REPL (Read-Eval-Print Loop)** for interacting with Pebble from the terminal.
+Provides a simple **REPL (Read-Eval-Print Loop)** for interacting with Fade from the terminal.
 
 ---
 
@@ -133,7 +133,7 @@ Provides a simple **REPL (Read-Eval-Print Loop)** for interacting with Pebble fr
 
 * Python 3.10 or newer
 
-### Run Pebble
+### Run Fade
 
 Open a terminal in the project directory and run:
 
@@ -144,29 +144,29 @@ python shell.py
 You will see:
 
 ```text
-pebble >
+fade >
 ```
 
-You can then enter Pebble code:
+You can then enter Fade code:
 
 ```text
-pebble > 10 + 5
+fade > 10 + 5
 15
 
-pebble > 2 * (3 + 4)
+fade > 2 * (3 + 4)
 14
 
-pebble > x = 10
+fade > x = 10
 10
 
-pebble > x + 5
+fade > x + 5
 15
 ```
 
 To exit the REPL:
 
 ```text
-pebble > bye()
+fade > bye()
 ```
 
 ---
@@ -175,7 +175,7 @@ pebble > bye()
 
 ### V1 — Arithmetic Language
 
-The first working version established Pebble's core language pipeline.
+The first working version established Fade's core language pipeline.
 
 Introduced:
 
@@ -264,16 +264,16 @@ Example:
 V1.3.1 introduces the foundation for storing and reusing values through **variables**.
 
 This update completely focussed:
-* Returning Pebble Nodes as output instead of Python outputs.
+* Returning Fade Nodes as output instead of Python outputs.
 * Fixing Bugs
 
 ---
 
 ## Development
 
-Pebble is still an evolving project. New language features will be added as development continues.
+Fade is still an evolving project. New language features will be added as development continues.
 
-The language design and implementation may change as Pebble grows.
+The language design and implementation may change as Fade grows.
 
 ---
 
