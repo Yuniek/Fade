@@ -8,7 +8,7 @@ from .errors        import FadeError
 # Run function to execute the code
 # ##################################
 
-def run(text:str, env, debug_level=0):
+def run(text:str, env, debug_level=0)->list:
     """
     text should be a fade code.
     """
@@ -21,7 +21,8 @@ def run(text:str, env, debug_level=0):
     if debug_level > 1: print(ast)
 
     if ast is None:
-        return None
+        return [None]
 
     interpreter = Interpreter(ast, env)
-    return interpreter.evaluate()
+    return_values = interpreter.evaluate()
+    return return_values

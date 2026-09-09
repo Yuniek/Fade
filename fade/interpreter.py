@@ -5,6 +5,8 @@ from .ast import (
     NumberNode,
     BooleanNode,
     IdentifierNode,
+    BlockNode,
+    StatementNode,
     UnaryOperation,
     BinaryOperation,
     AssignmentOperation,
@@ -20,16 +22,28 @@ class Interpreter:
         self.ast = ast
         self.env = env
 
-    def evaluate(self):
-        return self.evaluator(self.ast)
+    def evaluate(self)->list:
+        result = self.evaluator(self.ast)
+        if isinstance(result, list):
+            return result
+        else:
+            raise FadeRuntimeError("Incorrect Format of Statements in Interpreter")
 
     def evaluator(self, ast:ASTNode):
+        if isinstance(ast, BlockNode):
+            statements = ast.statements
+            returnList = []
+            for statement in statements:
+                returnList.append(self.evaluator(statement))
+            return returnList
         if isinstance(ast, NumberNode):
             return ast
         if isinstance(ast, BooleanNode):
                     return ast
         if isinstance(ast, IdentifierNode):
             return self.env.getVariable(ast.value)
+        if isinstance(ast, StatementNode):
+            return self.evaluator(ast.statement)
         if isinstance(ast, AssignmentOperation):
             identifier = ast.identifier.value
             expression = self.evaluator(ast.expression)

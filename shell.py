@@ -7,9 +7,10 @@ while True:
     if text == 'bye()': exit()
 
     try:
-        result = fade.run(text, env, 2)
-        if result is not None:
-            print(result)
+        results = fade.run(text, env)
+        for result in results:
+            if result is not None:
+                print(result)
             
     except fade.FadeError as error:
         print(error)
