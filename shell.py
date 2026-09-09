@@ -1,14 +1,13 @@
 import fade
 
-env = fade.environment
+env = fade.Environment()
 while True:
     text = input('fade > ')
 
     if text == 'bye()': exit()
 
-
     try:
-        result = fade.run(text, env)
+        result = fade.run(text, env, 2)
         if result is not None:
             print(result)
             

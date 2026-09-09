@@ -6,7 +6,7 @@ from .errors import InvalidTokenError
 # ##################################
 
 TOKEN_TYPES = [
-    ('KEYWORD',          r'\b(true|false)\b'),
+    ('KEYWORD',          r'\b(true|false|if|else)\b'),
     ('FLOAT',            r'\d+\.\d+'),
     ('INT',              r'\d+'),
     ('GREATER_OR_EQUAL', r'>='),
@@ -25,6 +25,9 @@ TOKEN_TYPES = [
     ('DIV',              r'/'),
     ('LPAREN',           r'\('),
     ('RPAREN',           r'\)'),
+    ('LBRACE',           r'\{'),
+    ('RBRACE',           r'\}'),
+    ('SEMICOLON',        r';'),
     ('STRING',           r'\".*?\"'),
     ('IDENTIFIER',       r'[A-Za-z_][A-Za-z0-9_]*'),
     ('WHITESPACE',       r'\s+'),

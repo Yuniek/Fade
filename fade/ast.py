@@ -44,6 +44,33 @@ class IdentifierNode(ASTNode):
     def __repr__(self) -> str:
         return f"Identifier({self.value})"
 
+class StatementNode(ASTNode):
+    def __init__(self, statement: ASTNode):
+        self.statement = statement
+
+    def __repr__(self) -> str:
+        return f'Statement({self.statement})'
+    
+class BlockNode(ASTNode):
+    def __init__(self, statements: list[StatementNode]):
+        self.statements = statements
+
+    def __repr__(self) -> str:
+        return f'Block({self.statements})'
+
+class IfNode(ASTNode):
+    def __init__(self, condition: ASTNode, body: BlockNode, else_body: BlockNode | None = None):
+        self.condition = condition
+        self.body = body
+        self.else_body = else_body
+
+    def __repr__(self) -> str:
+        return (
+            f'If({self.condition}, '
+            f'{self.body}, '
+            f'{self.else_body})'
+        )
+
 class UnaryOperation(ASTNode):
     def __init__(self, op:str, operand:ASTNode):
         self.op = op

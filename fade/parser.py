@@ -5,6 +5,8 @@ from .ast import (
     NumberNode,
     BooleanNode,
     IdentifierNode,
+    StatementNode,
+    BlockNode,
     UnaryOperation,
     BinaryOperation,
     AssignmentOperation,
@@ -29,10 +31,8 @@ class Parser:
 
     def parse(self):
         if len(self.tokens) < 2: return
-        if self.current_token().type == 'IDENTIFIER' and self.tokens[self.position+1].type == 'EQUAL':
-            node = self.parse_identifier()
-        else:
-            node = self.parse_or()
+
+        node = self.parse_statements()
 
         if self.current_token().type != 'EOF':
             raise InvalidSyntaxError(
@@ -42,6 +42,26 @@ class Parser:
             )
 
         return node
+
+    def parse_statements(self) -> BlockNode:
+        statements = []
+        while self.current_token().type != 'EOF':
+            statements.append(self.parse_statement())
+
+            if self.current_token().type == 'SEMICOLON':
+                self.advance()
+            else:
+                break
+            
+        return BlockNode(statements)
+    
+    def parse_statement(self) -> StatementNode:
+        if self.current_token().type == 'IDENTIFIER' and self.tokens[self.position+1].type == 'EQUAL':
+            node = self.parse_identifier()
+        else:
+            node = self.parse_or()
+            
+        return StatementNode(node)
 
     def parse_identifier(self)->ASTNode:
         identifier = IdentifierNode(self.current_token().value)
