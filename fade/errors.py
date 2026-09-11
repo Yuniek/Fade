@@ -8,7 +8,7 @@ class FadeError(Exception):
         self.pos_start   = pos_start
         self.pos_end     = pos_end
         self.detail     = detail
-        super().__init__(self.detail)
+        super().__init__(f"{self.type}:{self.detail}")
 
 class InvalidTokenError(FadeError):
     def __init__(self, pos_start, pos_end, invalid_token):

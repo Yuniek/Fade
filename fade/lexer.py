@@ -1,5 +1,5 @@
 import re
-from .errors import InvalidTokenError
+from . import errors as fadeError
 
 # ##################################
 # Tokens
@@ -33,17 +33,6 @@ TOKEN_TYPES = [
     ('WHITESPACE',       r'\s+'),
 ]
 
-OPERATIONS = {
-    "PLUS": {},
-    "MINUS": {},
-    "MUL": {},
-    "DIV": {},
-    "GREATER": {},
-    "LESSER": {},
-    "EQUALITY": {},
-    "NOT_EQUAL": {},
-}
-
 class Token:
     def __init__(self, token_type, value:int|float|str|None, pos:dict[str, int]):
         self.type:str = token_type
@@ -72,7 +61,7 @@ class Lexer:
 
         for match in re.finditer(pattern, self.text):
             if match.start() != position:
-                raise InvalidTokenError(position,match.start(),f"{self.text[position:match.start()]}")
+                raise fadeError.InvalidTokenError(position,match.start(),f"{self.text[position:match.start()]}")
 
             position = match.end()
             if match.lastgroup == 'WHITESPACE': continue
@@ -84,16 +73,14 @@ class Lexer:
                 value = int(value)
             elif token_type == 'STRING':
                 value = value[1:-1]
-            elif token_type == 'IDENTIFIER':
-                value = value
-            elif token_type == 'KEYWORD':
+            elif token_type in ('IDENTIFIER', 'KEYWORD'):
                 value = value
             else:
                 value = None
             tokens.append(Token(token_type, value, {'start':match.start(), 'end':match.end()}))
 
         if position != len(self.text):
-            raise InvalidTokenError(
+            raise fadeError.InvalidTokenError(
                 position,
                 len(self.text),
                 self.text[position:]
