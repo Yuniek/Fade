@@ -89,7 +89,7 @@ class Parser:
 
         if self.current_token().type == 'KEYWORD' and self.current_token().value == 'else':
             self.advance()
-            if self.current_token().type != 'LBRACE':
+            if self.current_token().type != 'LBRACE' and (self.current_token().type != 'KEYWORD' and self.current_token().value != 'if'):
                 raise fadeError.InvalidSyntaxError(
                     self.current_token().pos['start'],
                     self.current_token().pos['end'],

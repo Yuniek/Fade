@@ -10,38 +10,59 @@ Fade is currently under active development, with new language features being add
 
 ## Current Version
 
-**V1.3.1 — Boolean Language Patch**
+**V1.4 — Control Flow**
 
 Fade currently supports:
 
 - Integers and floating-point numbers
-- Addition, subtraction, multiplication, and division
+- Addition, Subtraction, Multiplication, and Division
 - Operator precedence
 - Parentheses and nested parentheses
-- Unary `+` and `-` operators
+- Unary `+`, `-` and `not` operators
 - Comparison operators: `<`, `<=`, `>`, `>=`, `==`, `!=`
-- Boolean operations: `and`, `or`, and `not`
-- Variables and assignment
+- Boolean operations: `and`, and `or`
+- Variable assignment
 - A runtime environment for storing variables
-- Basic lexical, syntax, and runtime error handling
+- Multiple Statement execution in single line by separating via  semicolon `;`
+- Control Flow using: `if`, `else if`  and `else`
+- Lexical, Syntax, and Runtime error handling
 - An interactive REPL
 
 ### Example
 
 ```text
-fade > x = 10
-
-fade > x + 5
-15
-
-fade > x * 2
-20
-
-fade > x > 15
+fade > 12   
+12
+fade > 12.3
+12.3
+fade > 1+2-3*4/5
+0.6000000000000001
+fade > +4
+4
+fade > -5
+-5
+fade > not true
 false
-
-fade > x > 5 and x < 20
+fade > not false
 true
+fade > 5<=5
+true
+fade > 5<5
+false
+fade > 5<5 or 5==5
+true
+fade > 5<5 and 5==5
+false
+fade > x=10
+fade > y=20
+fade > x+15
+25
+fade > x*2;y*3
+20
+60
+fade > if(x<y){x+y}else if (x==y){0} else {x-y}
+30
+fade > 
 ```
 
 ---
@@ -52,20 +73,18 @@ Fade processes source code through a simple interpreter pipeline:
 
 ```text
 Source Code
-     ↓
-   Lexer
-     ↓
-   Tokens
-     ↓
-   Parser
-     ↓
-     AST
-     ↓
- Interpreter
-     ↓
- Environment
-     ↓
-   Result
+↓
+Lexer
+↓
+Tokens
+↓
+Parser
+↓
+AST
+↓
+Interpreter ----> Environment
+↓
+Result
 ```
 
 Each stage has a specific responsibility:
@@ -79,7 +98,7 @@ Each stage has a specific responsibility:
 
 ### Lexer
 
-The lexer reads the source code and converts it into **tokens** such as numbers, identifiers, operators, and parentheses.
+The lexer reads the source code and converts it into **tokens** such as numbers, identifiers, operators, parentheses, etc.
 
 ### Parser
 
@@ -101,15 +120,25 @@ This structure gives Fade a foundation for adding more programming-language feat
 
 ## Project Structure
 
-```text
-Fade/
+# Project Structure
 
-├── fade.py
+# Project Structure
+
+```
+Fade/
+├── fade/
+│   ├── __init__.py
+│   ├── ast.py
+│   ├── environment.py
+│   ├── errors.py
+│   ├── interpreter.py
+│   ├── lexer.py
+│   └── parser.py
 ├── README.md
 └── shell.py
 ```
 
-### `fade.py`
+### `fade/`
 
 Contains the core implementation of the Fade language:
 
@@ -152,15 +181,6 @@ You can then enter Fade code:
 ```text
 fade > 10 + 5
 15
-
-fade > 2 * (3 + 4)
-14
-
-fade > x = 10
-10
-
-fade > x + 5
-15
 ```
 
 To exit the REPL:
@@ -189,8 +209,8 @@ Introduced:
 * Tree-walk interpreter
 * Basic error handling
 * Interactive REPL
-
-### V1.1 — Unary Operators
+---
+##### V1.1 — Unary Operators
 
 V1.1 extended the arithmetic system with **unary operators**.
 
@@ -202,23 +222,7 @@ Added:
 * Unary operators with parentheses
 * Unary operators combined with binary expressions
 * Improved REPL error handling
-
-Examples:
-
-```text
--5
-
-+5
-
---5
-
--(2 + 3)
-
-5 * -3
-
-2 + -3 * 4
-```
-
+---
 ### V1.2 — Variable Language
 
 V1.2 introduces the foundation for storing and reusing values through **variables**.
@@ -229,15 +233,6 @@ Added:
 * Variable assignment
 * Variable environment
 * Variable-based expressions
-
-Example:
-
-```text
-x = 10
-
-x + 5
-```
-
 ---
 ### V1.3 — Boolean Language
 
@@ -249,24 +244,26 @@ Added:
 * comparison operations
 * and, or and not
 * new boolean Node
-
-Example:
-
-```text
-4>5
-
-5>=1
-```
-
 ---
 ### V1.3.1 — Boolean Language Patch.
 
-V1.3.1 introduces the foundation for storing and reusing values through **variables**.
+V1.3.1 extended the foundation for storing and reusing values through **variables**.
 
 This update completely focussed:
 * Returning Fade Nodes as output instead of Python outputs.
 * Fixing Bugs
 
+---
+### V1.4 — Control Flow
+
+V1.4 introduces **control flow**, allowing Fade programs to make decisions based on conditions.
+
+Added:
+
+* keywords: `if`, `else`
+* ast nodes: `BlockNode`, `StatementNode`, `IfNode`
+* parser: `parse_block`, `parse_statements`, `parse_statement`, `parse_if`
+* interpreter support for: `BlockNode`, `StatementNode`, `IfNode`
 ---
 
 ## Development

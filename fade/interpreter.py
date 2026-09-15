@@ -115,7 +115,7 @@ class Interpreter:
 
             CASES = [(ast.NumberNode, ast.BooleanNode)]
             op = node.op
-            operand = node.operand
+            operand = self.evaluator(node.operand)
 
             match op:
                 case 'PLUS':
