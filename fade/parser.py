@@ -48,13 +48,15 @@ class Parser:
 
     def parse_statements(self) -> ast.BlockNode:
         statements = []
-        while self.current_token().type != 'EOF':
-            statements.append(self.parse_statement())
+        while self.current_token().type not in ['EOF', 'RBRACE']:
 
-            if self.current_token().type == 'SEMICOLON':
+            while self.current_token().type in ['SEMICOLON', 'NEWLINE']:
                 self.advance()
-            else:
+            
+            if self.current_token().type in ['EOF', 'RBRACE']:
                 break
+
+            statements.append(self.parse_statement())
             
         return ast.BlockNode(statements)
     

@@ -30,7 +30,8 @@ TOKEN_TYPES = [
     ('SEMICOLON',        r';'),
     ('STRING',           r'\".*?\"'),
     ('IDENTIFIER',       r'[A-Za-z_][A-Za-z0-9_]*'),
-    ('WHITESPACE',       r'\s+'),
+    ('NEWLINE',          r'\n'),
+    ('WHITESPACE',       r'[ \t]+'),
 ]
 
 class Token:

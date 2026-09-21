@@ -25,6 +25,8 @@ Fade currently supports:
 - A runtime environment for storing variables
 - Multiple Statement execution in single line by separating via  semicolon `;`
 - Control Flow using: `if`, `else if`  and `else`
+- File execution through `.fade` source files
+- Command-line interface with `--tokens` and `--ast` debugging options
 - Lexical, Syntax, and Runtime error handling
 - An interactive REPL
 
@@ -119,13 +121,17 @@ This structure gives Fade a foundation for adding more programming-language feat
 ---
 
 ## Project Structure
-
-# Project Structure
-
-# Project Structure
-
 ```
 Fade/
+├── examples/
+│   ├── 001.integer_test.fade
+│   ├── 002.float_test.fade
+│   ├── 003.arithmetic_operation_test.fade
+│   ├── 004.unary_test.fade
+│   ├── 005.comparison_test.fade
+│   ├── 006.variable_assignment_test.fade
+│   ├── 007.semicolon_test.fade
+│   └── 008.control_flow_test.fade
 ├── fade/
 │   ├── __init__.py
 │   ├── ast.py
@@ -135,7 +141,7 @@ Fade/
 │   ├── lexer.py
 │   └── parser.py
 ├── README.md
-└── shell.py
+└── fade.py
 ```
 
 ### `fade/`
@@ -150,9 +156,13 @@ Contains the core implementation of the Fade language:
 * Error handling
 * `run()` function
 
-### `shell.py`
+### `fade.py`
 
-Provides a simple **REPL (Read-Eval-Print Loop)** for interacting with Fade from the terminal.
+Provides the Fade command-line interface, including:
+- Interactive REPL
+- `.fade` file execution
+- Token inspection with `--tokens`
+- AST inspection with `--ast`
 
 ---
 
@@ -162,12 +172,12 @@ Provides a simple **REPL (Read-Eval-Print Loop)** for interacting with Fade from
 
 * Python 3.10 or newer
 
-### Run Fade
+### Run the REPL
 
 Open a terminal in the project directory and run:
 
 ```bash
-python shell.py
+python fade.py
 ```
 
 You will see:
@@ -187,6 +197,32 @@ To exit the REPL:
 
 ```text
 fade > bye()
+```
+
+### Run a Fade File
+
+Execute a `.fade` source file with:
+
+```bash
+python fade.py examples/001.integer_test.fade
+```
+
+### Inspect Tokens
+
+```bash
+python fade.py examples/001.integer_test.fade --tokens
+```
+
+### Inspect the AST
+
+```bash
+python fade.py examples/001.integer_test.fade --ast
+```
+
+Both options can also be used together:
+
+```bash
+python fade.py examples/001.integer_test.fade --tokens --ast
 ```
 
 ---
@@ -265,6 +301,19 @@ Added:
 * parser: `parse_block`, `parse_statements`, `parse_statement`, `parse_if`
 * interpreter support for: `BlockNode`, `StatementNode`, `IfNode`
 ---
+
+### V1.4.1 — File Execution & CLI
+
+V1.4.1 extends Fade beyond the interactive REPL by adding **source file execution and command-line options**.
+
+Added:
+
+* `.fade` source file execution
+* Optional token output with `--tokens`
+* Optional AST output with `--ast`
+* Support for multiline Fade programs
+* Newline-based statement separation
+* `examples/` directory containing feature test programs
 
 ## Development
 
