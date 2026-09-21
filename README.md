@@ -10,7 +10,7 @@ Fade is currently under active development, with new language features being add
 
 ## Current Version
 
-**V1.4 — Control Flow**
+**V1.4.1 — File Execution & CLI**
 
 Fade currently supports:
 
@@ -20,7 +20,7 @@ Fade currently supports:
 - Parentheses and nested parentheses
 - Unary `+`, `-` and `not` operators
 - Comparison operators: `<`, `<=`, `>`, `>=`, `==`, `!=`
-- Boolean operations: `and`, and `or`
+- Boolean operations: `and`, `or` and `not`
 - Variable assignment
 - A runtime environment for storing variables
 - Multiple Statement execution in single line by separating via  semicolon `;`
@@ -96,7 +96,7 @@ Each stage has a specific responsibility:
 - **AST** — Represents the structure of the program as a tree of language constructs.
 - **Interpreter** — Evaluates the AST according to Fade's semantics.
 - **Environment** — Stores and retrieves variables during execution.
-- **Result** — Produces the final evaluated value or an appropriate error.
+- **Result** — Produces the evaluated result of each executable statement or an appropriate error.
 
 ### Lexer
 
@@ -272,22 +272,23 @@ Added:
 ---
 ### V1.3 — Boolean Language
 
-V1.3 introduces the foundation for storing and reusing values through **variables**.
+V1.3 introduced **boolean values, comparisons, and logical operations**.
 
 Added:
 
-* keywords (true, false)
-* comparison operations
-* and, or and not
-* new boolean Node
+* Keywords: `true`, `false`
+* Comparison operations
+* Logical operations: `and`, `or`, `not`
+* `BooleanNode`
 ---
-### V1.3.1 — Boolean Language Patch.
+### V1.3.1 — Boolean Language Patch
 
-V1.3.1 extended the foundation for storing and reusing values through **variables**.
+V1.3.1 focused on improving the internal representation and output handling of boolean expressions.
 
-This update completely focussed:
-* Returning Fade Nodes as output instead of Python outputs.
-* Fixing Bugs
+Updated:
+
+* Returning Fade Nodes as output instead of raw Python values
+* Bug fixes and stability improvements
 
 ---
 ### V1.4 — Control Flow
@@ -300,6 +301,7 @@ Added:
 * ast nodes: `BlockNode`, `StatementNode`, `IfNode`
 * parser: `parse_block`, `parse_statements`, `parse_statement`, `parse_if`
 * interpreter support for: `BlockNode`, `StatementNode`, `IfNode`
+* semicolon-based statement separation
 ---
 
 ### V1.4.1 — File Execution & CLI
@@ -313,7 +315,7 @@ Added:
 * Optional AST output with `--ast`
 * Support for multiline Fade programs
 * Newline-based statement separation
-* `examples/` directory containing feature test programs
+* `examples/` directory containing feature-specific test programs
 
 ## Development
 
