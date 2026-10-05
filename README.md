@@ -2,7 +2,7 @@
 
 Fade is a small interpreted programming language built from scratch in Python.
 
-The project focuses on understanding the core components of a programming language, including **lexical analysis, parsing, abstract syntax trees, interpretation, variables, and runtime environments**.
+The project focuses on understanding the core components of a programming language, including **lexical analysis, parsing, abstract syntax trees, interpretation, variables, control flow, loops, and runtime environments**.
 
 Fade is currently under active development, with new language features being added incrementally.
 
@@ -10,7 +10,7 @@ Fade is currently under active development, with new language features being add
 
 ## Current Version
 
-**V1.4.1 — File Execution & CLI**
+**V1.5 — Loop Language**
 
 Fade currently supports:
 
@@ -23,8 +23,10 @@ Fade currently supports:
 - Boolean operations: `and`, `or` and `not`
 - Variable assignment
 - A runtime environment for storing variables
-- Multiple Statement execution in single line by separating via  semicolon `;`
-- Control Flow using: `if`, `else if`  and `else`
+- Multiple statement execution on a single line using `;`
+- Control flow using: `if`, `else if`  and `else`
+- Loops using: `repeat (...) {...}`, `repeat until (...) {...}`, `repeat {...} until (...)`
+- `break` and `continue`
 - File execution through `.fade` source files
 - Command-line interface with `--tokens` and `--ast` debugging options
 - Lexical, Syntax, and Runtime error handling
@@ -131,7 +133,8 @@ Fade/
 │   ├── 005.comparison_test.fade
 │   ├── 006.variable_assignment_test.fade
 │   ├── 007.semicolon_test.fade
-│   └── 008.control_flow_test.fade
+│   ├── 008.control_flow_test.fade
+│   └── 009.loop_test.fade
 ├── fade/
 │   ├── __init__.py
 │   ├── ast.py
@@ -261,7 +264,7 @@ Added:
 ---
 ### V1.2 — Variable Language
 
-V1.2 introduces the foundation for storing and reusing values through **variables**.
+V1.2 introduced the foundation for storing and reusing values through **variables**.
 
 Added:
 
@@ -293,20 +296,20 @@ Updated:
 ---
 ### V1.4 — Control Flow
 
-V1.4 introduces **control flow**, allowing Fade programs to make decisions based on conditions.
+V1.4 introduced **control flow**, allowing Fade programs to make decisions based on conditions.
 
 Added:
 
-* keywords: `if`, `else`
-* ast nodes: `BlockNode`, `StatementNode`, `IfNode`
-* parser: `parse_block`, `parse_statements`, `parse_statement`, `parse_if`
-* interpreter support for: `BlockNode`, `StatementNode`, `IfNode`
-* semicolon-based statement separation
+* Keywords: `if`, `else`
+* AST nodes: `BlockNode`, `StatementNode`, `IfNode`
+* Parser: `parse_block`, `parse_statements`, `parse_statement`, `parse_if`
+* Interpreter support for: `BlockNode`, `StatementNode`, `IfNode`
+* Semicolon-based statement separation for multiple statements on one line
 ---
 
 ### V1.4.1 — File Execution & CLI
 
-V1.4.1 extends Fade beyond the interactive REPL by adding **source file execution and command-line options**.
+V1.4.1 extended Fade beyond the interactive REPL by adding **source file execution and command-line options**.
 
 Added:
 
@@ -314,8 +317,24 @@ Added:
 * Optional token output with `--tokens`
 * Optional AST output with `--ast`
 * Support for multiline Fade programs
-* Newline-based statement separation
+* Newline-based statement separation for multiline source files
 * `examples/` directory containing feature-specific test programs
+
+### V1.5 — Loop Language
+
+V1.5 introduced loops, allowing Fade programs to repeat operations and control the execution of repetitive tasks.
+
+Added:
+
+* Keywords: `repeat`, `until`, `break`, `continue`
+* AST nodes: `ForLoopNode`, `WhileLoopNode`, `DoWhileLoopNode`, `BreakNode`, `ContinueNode`
+* Parser: `chk_current_token_value`, `parse_repeat`, `parse_for_loop`, `parse_while_loop`, `parse_do_while_loop`
+* Interpreter signals: `BreakSignal`, `ContinueSignal`
+* Interpreter support for: `ForLoopNode`, `WhileLoopNode`, `DoWhileLoopNode`, `BreakNode`, `ContinueNode`
+* JSON-based **AST** output
+* Fixed the `if`/`else` multiline bug
+* Test file for loop test `009.loop_test.fade`
+* Changed output behavior from interpreting the entire program before displaying results to displaying outputs immediately after interpretation
 
 ## Development
 

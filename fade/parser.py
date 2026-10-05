@@ -17,6 +17,9 @@ class Parser:
     def advance(self):
         self.position += 1
 
+    def chk_current_token_value(self, type, value):
+        return self.current_token().type == type and self.current_token().value == value
+
     def parse(self):
         if len(self.tokens) < 2: return
 
@@ -61,14 +64,128 @@ class Parser:
         return ast.BlockNode(statements)
     
     def parse_statement(self) -> ast.StatementNode:
-        if self.current_token().type == 'KEYWORD' and self.current_token().value == 'if':
-            node = self.parse_if()
-        elif self.current_token().type == 'IDENTIFIER' and self.tokens[self.position+1].type == 'EQUAL':
+        if self.current_token().type == 'IDENTIFIER' and self.tokens[self.position+1].type == 'EQUAL':
             node = self.parse_identifier()
+        elif self.chk_current_token_value('KEYWORD', 'if'):
+            node = self.parse_if()
+        elif self.chk_current_token_value('KEYWORD', 'repeat'):
+            node = self.parse_repeat()
+        elif self.chk_current_token_value('KEYWORD', 'break'):
+            self.advance()
+            node = ast.BreakNode()
+        elif self.chk_current_token_value('KEYWORD', 'continue'):
+            self.advance()
+            node = ast.ContinueNode()
         else:
             node = self.parse_or()
             
         return ast.StatementNode(node)
+
+    def parse_repeat(self) -> ast.ASTNode:
+        self.advance()
+
+        if self.current_token().type == 'LPAREN':
+            return self.parse_for_loop()
+        elif self.current_token().type == 'LBRACE':
+            return self.parse_do_while_loop()
+        elif self.chk_current_token_value('KEYWORD', 'until'):
+            return self.parse_while_loop()
+        else:
+            raise fadeError.InvalidSyntaxError(
+                    self.current_token().pos['start'],
+                    self.current_token().pos['end'],
+                    "Expected '(', '{' or until after repeat _"
+                )
+
+    def parse_for_loop(self) -> ast.ForLoopNode:
+        self.advance()
+        count = self.parse_or()
+
+        if self.current_token().type != 'RPAREN':
+            raise fadeError.InvalidSyntaxError(
+                self.current_token().pos['start'],
+                self.current_token().pos['end'],
+                "Expected ')' after repeat (..._"
+            )
+        
+        self.advance()
+
+        if self.current_token().type != 'LBRACE':
+            raise fadeError.InvalidSyntaxError(
+                self.current_token().pos['start'],
+                self.current_token().pos['end'],
+                "Expected '{' after repeat (...) _"
+            )
+        
+        body = self.parse_block()
+
+        return ast.ForLoopNode(count, body)
+    
+    def parse_while_loop(self) -> ast.WhileLoopNode:
+        self.advance()
+
+        if self.current_token().type != 'LPAREN':
+            raise fadeError.InvalidSyntaxError(
+                self.current_token().pos['start'],
+                self.current_token().pos['end'],
+                "Expected '(' after repeat until _"
+            )
+        
+        self.advance()
+        condition = self.parse_or()
+
+        if self.current_token().type != 'RPAREN':
+            raise fadeError.InvalidSyntaxError(
+                self.current_token().pos['start'],
+                self.current_token().pos['end'],
+                "Expected ')' after repeat until (..._"
+            )
+        
+        self.advance()
+
+        if self.current_token().type != 'LBRACE':
+            raise fadeError.InvalidSyntaxError(
+                self.current_token().pos['start'],
+                self.current_token().pos['end'],
+                "Expected '{' after repeat until (...) _"
+            )
+        
+        body = self.parse_block()
+        
+        return ast.WhileLoopNode(condition, body)
+    
+    def parse_do_while_loop(self) -> ast.DoWhileLoopNode:
+        body = self.parse_block()
+        
+        if not self.chk_current_token_value('KEYWORD', 'until'):
+            raise fadeError.InvalidSyntaxError(
+                self.current_token().pos['start'],
+                self.current_token().pos['end'],
+                "Expected 'until' after repeat {...} _"
+            )
+        
+        self.advance()
+
+        if self.current_token().type != 'LPAREN':
+            raise fadeError.InvalidSyntaxError(
+                self.current_token().pos['start'],
+                self.current_token().pos['end'],
+                "Expected '(' after repeat {...} until _"
+            )
+
+        self.advance()        
+        condition = self.parse_or()
+
+        if self.current_token().type != 'RPAREN':
+            raise fadeError.InvalidSyntaxError(
+                self.current_token().pos['start'],
+                self.current_token().pos['end'],
+                "Expected ')' after repeat {...} until (..._"
+            )
+
+        self.advance()
+        
+        return ast.DoWhileLoopNode(body, condition)
 
     def parse_if(self) -> ast.IfNode:
         self.advance()
@@ -89,7 +206,10 @@ class Parser:
         body=self.parse_block()
         else_body = None
 
-        if self.current_token().type == 'KEYWORD' and self.current_token().value == 'else':
+        while self.current_token().type == 'NEWLINE':
+            self.advance()
+
+        if self.chk_current_token_value('KEYWORD', 'else'):
             self.advance()
             if self.current_token().type != 'LBRACE' and (self.current_token().type != 'KEYWORD' and self.current_token().value != 'if'):
                 raise fadeError.InvalidSyntaxError(

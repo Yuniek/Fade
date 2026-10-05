@@ -1,32 +1,39 @@
 from .lexer         import Lexer
+from .              import ast
 from .parser        import Parser
 from .environment   import Environment
 from .interpreter   import Interpreter
 from .errors        import FadeError
+import json
 
 # ##################################
 # Run function to execute the code
 # ##################################
 
-def run(text:str, env, show_tokens:bool=False, show_ast:bool=False)->list:
+def run(text:str, env, show_tokens:bool=False, show_ast:bool=False):
     """
     text should be a fade code.
     """
-
-    return_values = []
+    
 
     lexer = Lexer(text)
     tokens = lexer.tokenize()
-    if show_tokens is True: return_values.append(tokens)
-
+    if show_tokens is True:
+        print(tokens)
+    
     parser = Parser(tokens)
-    ast = parser.parse()
-    if show_ast is True: return_values.append(ast)
+    tree = parser.parse()
 
-    if ast is None:
-        return [None]
-
-    if not (show_tokens or show_ast):
-        interpreter = Interpreter(ast, env)
-        return_values = interpreter.evaluate()
-    return return_values
+    if tree is None:
+        return
+    
+    if show_ast is True:
+        print(json.dumps(
+            tree.to_dict(),
+            indent=4
+        ))
+    
+    if not (show_tokens or show_ast) and isinstance(tree, ast.ASTNode):
+        interpreter = Interpreter(tree, env)
+        interpreter.evaluate()
+    

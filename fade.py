@@ -31,9 +31,6 @@ env = fade.Environment()
 def run(code):
     try:
         results = fade.run(code, env, args.tokens, args.ast)
-        for result in results:
-            if result is not None:
-                print(result)
         return True
             
     except fade.FadeError as error:

@@ -1,0 +1,71 @@
+__Task_Generate_the_first_10_Fibonacci_numbers = 0
+a = 0;
+b = 1;
+repeat (10) {
+    a
+    next = a + b
+    a = b
+    b = next
+}
+
+
+__Task_Calculate_compound_growth_until_an_investment_doubles = 0
+principal = 1000;
+rate = 8/100
+target = principal*2;
+time_in_years = 0;
+
+repeat until (principal < target) {
+    principal = principal + principal * rate;
+    time_in_years = time_in_years + 1;
+}
+
+time_in_years
+
+
+__Task_Process_payments_until_balance_is_paid_off = 0
+
+balance = 500;
+payment = 100;
+
+repeat {
+    balance = balance - payment;
+} until (balance >= 100);
+
+balance
+
+
+__Task_Search_for_a_number_whose_square_reaches_a_target = 0
+
+number = 1;
+target = 121;
+
+repeat (100) {
+    square = number * number;
+
+    if (square >= target) {
+        break;
+    }
+
+    number = number + 1;
+}
+
+number
+
+
+__Task_Calculate_the_sum_of_positive_values_while_skipping_values_that_are_below_zero = 0
+
+number = -5;
+sum = 0;
+
+repeat (11) {
+    number = number + 1;
+
+    if (number < 0) {
+        continue;
+    }
+
+    sum = sum + number;
+}
+
+sum

@@ -2,6 +2,16 @@ from .environment import Environment
 from . import ast, errors as fadeError
 
 # ##################################
+# Control Flow Signals
+# ##################################
+
+class BreakSignal(Exception):
+    pass
+
+class ContinueSignal(Exception):
+    pass
+
+# ##################################
 # Interpreter
 # ##################################
 
@@ -9,22 +19,87 @@ class Interpreter:
     def __init__(self, node:ast.ASTNode, env:Environment):
         self.node = node
         self.env = env
-        self.output = []
+        self.loop_depth = 0
 
-    def evaluate(self)->list:
+    def evaluate(self):
         self.evaluator(self.node)
-        return self.output
 
     def evaluator(self, node:ast.ASTNode):
         if isinstance(node, ast.BlockNode):
             statements = node.statements
             for statement in statements:
                 value = self.evaluator(statement)
-                if value:
-                    self.output.append(value)
+                if value is not None:
+                    print(value)
 
         if isinstance(node, ast.StatementNode):
             return self.evaluator(node.statement)
+
+        if isinstance(node, ast.ForLoopNode):
+            count = self.evaluator(node.count)
+            
+            if not (isinstance(count, ast.NumberNode) and isinstance(count.value, int)):
+                raise fadeError.FadeRuntimeError(f"Expected count to be integer for repeat loop")
+            
+            self.loop_depth+=1
+            
+            
+            try:
+                for _ in range(count.value):
+                    try:
+                        self.evaluator(node.body)
+                    except BreakSignal:
+                        break
+                    except ContinueSignal:
+                        continue
+            finally:
+                self.loop_depth-=1
+
+        if isinstance(node, ast.WhileLoopNode):
+            self.loop_depth+=1
+            try:
+                while True:
+                    condition = self.evaluator(node.condition)
+                    if isinstance(condition, ast.BooleanNode):
+                        if not condition.is_truthy(): break
+                    else:
+                        raise fadeError.FadeRuntimeError(f"Expected count to be boolean for repeat until loop")
+                    try:
+                        self.evaluator(node.body)
+                    except BreakSignal:
+                        break
+                    except ContinueSignal:
+                        continue
+            finally:
+                self.loop_depth-=1
+            
+        if isinstance(node, ast.DoWhileLoopNode):
+            self.loop_depth+=1
+            try:
+                while True:
+                    try:
+                        self.evaluator(node.body)
+                    except BreakSignal:
+                        break
+                    except ContinueSignal:
+                        pass
+                    condition = self.evaluator(node.condition)
+                    if isinstance(condition, ast.BooleanNode):
+                        if not condition.is_truthy(): break
+                    else:
+                        raise fadeError.FadeRuntimeError(f"Expected count to be boolean for repeat until loop")
+            finally:
+                self.loop_depth-=1
+
+        if isinstance(node, ast.BreakNode):
+            if self.loop_depth == 0:
+                raise fadeError.FadeRuntimeError("\'break\' used outside repeat loop")
+            raise BreakSignal()
+
+        if isinstance(node, ast.ContinueNode):
+            if self.loop_depth == 0:
+                raise fadeError.FadeRuntimeError("\'continue\' used outside repeat loop")
+            raise ContinueSignal()
 
         if isinstance(node, ast.IfNode):
             condition = self.evaluator(node.condition)

@@ -6,7 +6,7 @@ from . import errors as fadeError
 # ##################################
 
 TOKEN_TYPES = [
-    ('KEYWORD',          r'\b(true|false|if|else)\b'),
+    ('KEYWORD',          r'\b(true|false|if|else|repeat|until|break|continue)\b'),
     ('FLOAT',            r'\d+\.\d+'),
     ('INT',              r'\d+'),
     ('GREATER_OR_EQUAL', r'>='),
